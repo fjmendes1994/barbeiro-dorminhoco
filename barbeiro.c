@@ -1,4 +1,3 @@
-// https://github.com/silasss/theSleepingBarberProblem/blob/master/main.c
 // gcc barbeiro.c -o b -pthread
 // ./b
 
