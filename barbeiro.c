@@ -107,7 +107,7 @@ void customer_for_cut(){
         waiting = waiting + 1;
         sem_post(&customers_for_cut);
         sem_post(&mutex);
-        sem_wait(&hairstylist);
+        sem_wait(&hairstylists);
         get_cut();
     } else {
         sem_post(&mutex);
@@ -121,7 +121,7 @@ int main(){
     sem_init(&customers_for_cut, 0, 0);
     sem_init(&barbers, 0, 0);
     sem_init(&painters, 0, 0);
-    sem_init(&hairstylist, 0, 0);
+    sem_init(&hairstylists, 0, 0);
     sem_init(&mutex, 0, 1);
     printf("Olá Barbeiro\n");
     return 0;
