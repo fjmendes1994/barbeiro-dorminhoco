@@ -18,27 +18,27 @@ int waiting = 0;
 
 
 void shave(){
-    printf("Ta feita...");
+    printf("Ta feita...\n");
 }
 
 void get_shave(){
-    printf("To indo fazer a barba hein...");
+    printf("To indo fazer a barba hein...\n");
 }
 
 void paint(){
-    printf("Ta feita...");
+    printf("Ta pintado...\n");
 }
 
 void get_paint(){
-    printf("To indo fazer a barba hein...");
+    printf("To indo pintar o cabelo hein...\n");
 }
 
 void cut(){
-    printf("Ta feita...");
+    printf("Ta cortado...\n");
 }
 
 void get_cut(){
-    printf("To indo fazer a barba hein...");
+    printf("To indo cortar o cabelo hein...\n");
 }
 
 void barber(){
@@ -122,6 +122,21 @@ int main(){
     sem_init(&painters, 0, 0);
     sem_init(&hairstylists, 0, 0);
     sem_init(&mutex, 0, 1);
+
+    pthread_t b, p, h, cs, cp, cc;
+
+    pthread_create(&b, NULL, (void*)barber, NULL);
+    pthread_create(&p, NULL, (void*)painter, NULL);
+    pthread_create(&h, NULL, (void*)hairstylist, NULL);
+
+    while(1) {
+        pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
+        pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
+        pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
+        sleep(5);
+    }
+        
+
     printf("Olá Barbeiro\n");
     return 0;
 }
