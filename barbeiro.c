@@ -12,13 +12,12 @@
 
 sem_t customers_for_paint, customers_for_shave, customers_for_cut, 
       barbers, painters, hairstylists,
-      mutex, mutex_print;
+      mutex;
     
 int waiting = 0;
 
 
 void shave(){
-
     printf("Ta feita...\n");
 }
 
@@ -47,9 +46,10 @@ void barber(){
         sem_wait(&customers_for_shave);
         sem_wait(&mutex);
         waiting = waiting - 1;
+        shave();
         sem_post(&barbers);
         sem_post(&mutex);
-        shave();
+        
     }
 }
 
@@ -58,9 +58,10 @@ void painter(){
         sem_wait(&customers_for_paint);
         sem_wait(&mutex);
         waiting = waiting - 1;
+        paint();
         sem_post(&painters);
         sem_post(&mutex);
-        paint();
+        
     }
 }
 
@@ -69,9 +70,10 @@ void hairstylist(){
         sem_wait(&customers_for_cut);
         sem_wait(&mutex);
         waiting = waiting - 1;
+        cut();
         sem_post(&hairstylists);
         sem_post(&mutex);
-        cut();
+        
     }
 }
 
@@ -137,10 +139,8 @@ int main(){
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
-        sleep(0.75);
+        sleep(0.7);
     }
-        
 
-    printf("Olá Barbeiro\n");
     return 0;
 }
