@@ -139,7 +139,7 @@ int main(){
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
-        sleep(0.7);
+        sleep(1);
     }
 
     return 0;
