@@ -12,12 +12,13 @@
 
 sem_t customers_for_paint, customers_for_shave, customers_for_cut, 
       barbers, painters, hairstylists,
-      mutex;
+      mutex, mutex_print;
     
 int waiting = 0;
 
 
 void shave(){
+
     printf("Ta feita...\n");
 }
 
@@ -79,11 +80,12 @@ void customer_for_shave(){
     if(waiting < CHAIRS){
         waiting = waiting + 1;
         sem_post(&customers_for_shave);
+        get_shave();
         sem_post(&mutex);
         sem_wait(&barbers);
-        get_shave();
     } else {
         sem_post(&mutex);
+        printf("Fila tá cheia. Até mais.\n");
     }
 }
 
@@ -92,11 +94,12 @@ void customer_for_paint(){
     if(waiting < CHAIRS){
         waiting = waiting + 1;
         sem_post(&customers_for_paint);
+        get_paint();
         sem_post(&mutex);
         sem_wait(&painters);
-        get_paint();
     } else {
         sem_post(&mutex);
+        printf("Fila tá cheia. Até mais.\n");
     }
 }
 
@@ -105,11 +108,12 @@ void customer_for_cut(){
     if(waiting < CHAIRS){
         waiting = waiting + 1;
         sem_post(&customers_for_cut);
+        get_cut();
         sem_post(&mutex);
         sem_wait(&hairstylists);
-        get_cut();
     } else {
         sem_post(&mutex);
+        printf("Fila tá cheia. Até mais.\n");
     }
 }
 
@@ -133,7 +137,7 @@ int main(){
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
-        sleep(5);
+        sleep(0.75);
     }
         
 
