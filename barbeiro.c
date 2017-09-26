@@ -46,23 +46,25 @@ void barber(){
         sem_wait(&customers_for_shave);
         sem_wait(&mutex);
         waiting = waiting - 1;
-        shave();
-        sem_post(&barbers);
         sem_post(&mutex);
+        sem_post(&barbers);
+        shave();
         
     }
+    pthread_exit(NULL);    
 }
 
 void painter(){
     while(1){
-        sem_wait(&customers_for_paint);
+        sem_wait(&customers_for_paint); // Bloqueia a fila para pintar o cabelo
         sem_wait(&mutex);
         waiting = waiting - 1;
-        paint();
-        sem_post(&painters);
         sem_post(&mutex);
-        
+        sem_post(&painters);
+        paint();        
     }
+    pthread_exit(NULL);
+    
 }
 
 void hairstylist(){
@@ -70,25 +72,29 @@ void hairstylist(){
         sem_wait(&customers_for_cut);
         sem_wait(&mutex);
         waiting = waiting - 1;
-        cut();
-        sem_post(&hairstylists);
         sem_post(&mutex);
+        sem_post(&hairstylists);
+        cut();
         
+
     }
+    pthread_exit(NULL);
+    
 }
 
 void customer_for_shave(){
     sem_wait(&mutex);
     if(waiting < CHAIRS){
         waiting = waiting + 1;
-        sem_post(&customers_for_shave);
-        get_shave();
-        sem_post(&mutex);
-        sem_wait(&barbers);
+        sem_post(&customers_for_shave); // Libera a pessoa pra cortar
+        get_shave(); // Corta
+        sem_post(&mutex); // Libera o mutex
+        sem_wait(&barbers); // Bloqueia
     } else {
         sem_post(&mutex);
         printf("Fila tá cheia. Até mais.\n");
     }
+    pthread_exit(NULL);
 }
 
 void customer_for_paint(){
@@ -103,6 +109,7 @@ void customer_for_paint(){
         sem_post(&mutex);
         printf("Fila tá cheia. Até mais.\n");
     }
+    pthread_exit(NULL);
 }
 
 void customer_for_cut(){
@@ -117,6 +124,7 @@ void customer_for_cut(){
         sem_post(&mutex);
         printf("Fila tá cheia. Até mais.\n");
     }
+    pthread_exit(NULL);
 }
 
 int main(){
@@ -137,7 +145,9 @@ int main(){
 
     while(1) {
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
+        sleep(1);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
+        sleep(1);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
         sleep(1);
     }
