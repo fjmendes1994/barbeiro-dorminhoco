@@ -148,12 +148,11 @@ int main(){
             sleep(1.5);
             cont = 0;
         }
-
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
         cont = cont+3;
-              
+        //sleep(1);        
     }
 
     return 0;
