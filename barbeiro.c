@@ -145,11 +145,15 @@ int main(){
 
     while(1) {
         pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
-        sleep(1);
+        //sleep(1);
         pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
-        sleep(1);
+        //sleep(1);
         pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
-        sleep(1);
+        //sleep(1);
+
+        pthread_join(cs, NULL);
+        pthread_join(cp, NULL);
+        pthread_join(cc, NULL);        
     }
 
     return 0;
