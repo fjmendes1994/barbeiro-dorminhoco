@@ -14,7 +14,7 @@ sem_t customers_for_paint, customers_for_shave, customers_for_cut,
       barbers, painters, hairstylists,
       mutex;
     
-int waiting = 0;
+int waiting = 0, cont = 0;
 
 
 void shave(){
@@ -144,16 +144,16 @@ int main(){
     pthread_create(&h, NULL, (void*)hairstylist, NULL);
 
     while(1) {
-        pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
-        //sleep(1);
-        pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
-        //sleep(1);
-        pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
-        //sleep(1);
+        if(cont>=400){
+            sleep(1.5);
+            cont = 0;
+        }
 
-        pthread_join(cs, NULL);
-        pthread_join(cp, NULL);
-        pthread_join(cc, NULL);        
+        pthread_create(&cs, NULL, (void *) customer_for_shave, NULL);
+        pthread_create(&cp, NULL, (void *) customer_for_paint, NULL);
+        pthread_create(&cc, NULL, (void *) customer_for_cut, NULL);
+        cont = cont+3;
+              
     }
 
     return 0;
